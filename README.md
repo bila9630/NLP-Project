@@ -21,3 +21,7 @@ virtualenv env
 # activate the virtual environment
 env\Scripts\activate
 ```
+
+
+## data
+source: https://www.kaggle.com/datasets/rmisra/news-category-dataset
