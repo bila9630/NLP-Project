@@ -1,4 +1,5 @@
 # NLP-Project
+Check out our application: https://bila9630-nlp-project-applicationstreamlit-app-w1i1j6.streamlit.app/
 
 ## application
 ### how to start locally
