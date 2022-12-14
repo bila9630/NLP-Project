@@ -6,7 +6,7 @@ st.set_page_config(
 )
 
 
-def random_class(title, description):
+def random_class(title, description, model):
     # pass title and description to model
     # category = model.predict(title, description)
     category = random.choice(
@@ -17,6 +17,11 @@ def random_class(title, description):
 
 st.header("Welcome to the fast reporters!")
 st.write("Simply enter a news title and description and we'll classify it for you!")
+# Create a selectbox widget for choosing a machine learning model
+model_selectbox = st.selectbox(
+    "Choose a machine learning model:",
+    ["Decision Tree", "Random Forest", "SVM"]
+)
 
 news_title = st.text_input(label='Newspaper title',
                            placeholder='Enter your article title here')
@@ -25,7 +30,8 @@ news_description = st.text_area(label='Newspaper description',
 
 
 if st.button('Classify'):
-    # st.write("Classifying...")
-    category, confidence = random_class(news_title, news_description)
+    category, confidence = random_class(
+        news_title, news_description, model_selectbox)
+    st.write("Model: ", model_selectbox)
     st.write(f"Category: {category}")
     st.write(f"Confidence: {confidence}")
