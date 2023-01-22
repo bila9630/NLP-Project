@@ -6,6 +6,12 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
+# set page config (must be called as the first Streamlit command)
+st.set_page_config(
+    page_title="The fast reporters",
+    page_icon="📰",
+)
+
 
 # caching nltk data
 @st.cache(allow_output_mutation=True)
@@ -14,13 +20,6 @@ def download_nltk():
     nltk.download("punkt")
 
 download_nltk()
-
-
-# set page config
-st.set_page_config(
-    page_title="The fast reporters",
-    page_icon="📰",
-)
 
 
 # import model for deployment
