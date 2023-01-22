@@ -14,13 +14,15 @@ st.set_page_config(
     page_icon="📰",
 )
 
-# Load the model
-with open("naivebayes.pkl", "rb") as handle:
-    model = pickle.load(handle)
+
+# import model for deployment
+model = pickle.load(open("application/naiveBayes.pkl", "rb"))
+
+# import model on local machine
+# model = pickle.load(open("naiveBayes.pkl", "rb"))
+
 
 # Preprocess text
-
-
 def process_text(text):
     # convert text to lowercase, remove newlines and carriage returns, and strip leading/trailing whitespace
     text = text.lower().replace('\n', ' ').replace('\r', '').strip()
