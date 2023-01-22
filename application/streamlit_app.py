@@ -6,9 +6,17 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
-nltk.download("stopwords")
-nltk.download("punkt")
 
+# caching nltk data
+@st.cache(allow_output_mutation=True)
+def download_nltk():
+    nltk.download("stopwords")
+    nltk.download("punkt")
+
+download_nltk()
+
+
+# set page config
 st.set_page_config(
     page_title="The fast reporters",
     page_icon="📰",
@@ -24,6 +32,7 @@ def load_model():
     return model_nb, model_svm
 
 model_nb, model_svm = load_model()
+
 
 # import model on local machine
 # model_nb = pickle.load(open("naiveBayes.pkl", "rb"))
