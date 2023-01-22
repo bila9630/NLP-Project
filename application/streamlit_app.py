@@ -9,7 +9,7 @@ from nltk.corpus import stopwords
 # set page config (must be called as the first Streamlit command)
 st.set_page_config(
     page_title="The fast reporters",
-    page_icon="📚",
+    page_icon=":books:",
 )
 
 
@@ -18,6 +18,7 @@ st.set_page_config(
 def download_nltk():
     nltk.download("stopwords")
     nltk.download("punkt")
+
 
 download_nltk()
 
@@ -29,6 +30,7 @@ def load_model():
     model_nb = pickle.load(open("application/naiveBayes.pkl", "rb"))
     model_svm = pickle.load(open("application/linearSVM.pkl", "rb"))
     return model_nb, model_svm
+
 
 model_nb, model_svm = load_model()
 
