@@ -16,10 +16,10 @@ st.set_page_config(
 
 
 # import model for deployment
-model = pickle.load(open("application/naiveBayes.pkl", "rb"))
+# model = pickle.load(open("application/naiveBayes.pkl", "rb"))
 
 # import model on local machine
-# model = pickle.load(open("naiveBayes.pkl", "rb"))
+model = pickle.load(open("naiveBayes.pkl", "rb"))
 
 
 # Preprocess text
