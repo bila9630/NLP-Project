@@ -1,7 +1,6 @@
 import streamlit as st
 import random
 import pickle
-from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 
 st.set_page_config(
@@ -10,25 +9,16 @@ st.set_page_config(
 )
 
 
-# Load the tokenizer and model
-with open("tokenizer.pickle", "rb") as handle:
-    tokenizer = pickle.load(handle)
-
-with open("model.pickle", "rb") as handle:
-    model = pickle.load(handle)
+# with open("model.pickle", "rb") as handle:
+#     model = pickle.load(handle)
 
 
 def random_class(title, description):
     # Concatenate title and description to create a single input text
     text = title + " " + description
 
-    # Convert the input text to numerical sequences
-    input_string = [text]
-    input_string = pad_sequences(
-        tokenizer.texts_to_sequences(input_string), maxlen=140)
-
     # Predict the category using the input text
-    predicted_category = model.predict(input_string)
+    predicted_category = text
 
     # Generate a random confidence value
     confidence = round(random.random(), 2)
