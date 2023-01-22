@@ -9,7 +9,7 @@ from nltk.corpus import stopwords
 # set page config (must be called as the first Streamlit command)
 st.set_page_config(
     page_title="The fast reporters",
-    page_icon=":books:",
+    page_icon=":newspaper:",
 )
 
 
