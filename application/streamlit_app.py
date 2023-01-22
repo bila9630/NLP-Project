@@ -2,9 +2,11 @@ import streamlit as st
 import re
 import random
 import pickle
+import numpy as np
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+from keras.models import load_model
 
 # set page config (must be called as the first Streamlit command)
 st.set_page_config(
@@ -38,6 +40,29 @@ model_nb, model_svm = load_model()
 # import model on local machine
 # model_nb = pickle.load(open("naiveBayes.pkl", "rb"))
 # model_svm = pickle.load(open("linearSVM.pkl", "rb"))
+
+# Load the saved model nn and tokenizer
+@st.cache(allow_output_mutation=True)
+def load_saved_model_nn(model_path, tokenizer_path, encoder_path):
+    # Load the model from the file
+    model = load_model(model_path)
+
+    # Load the tokenizer from the file
+    with open(tokenizer_path, "rb") as handle:
+        tokenizer = pickle.load(handle)
+
+    # Load the encoder from the file
+    with open(encoder_path, "rb") as handle:
+        encoder = pickle.load(handle)
+
+    return model, tokenizer, encoder
+
+# Load the model and tokenizer for deployment
+model_nn, tokenizer_nn, encoder_nn = load_saved_model_nn("application/model_nn.h5", "application/tokenizer_nn.pickle", "application/encoder_nn.pickle")
+
+# Load the model and tokenizer on local machine
+# model_nn, tokenizer_nn, encoder_nn = load_saved_model_nn("model_nn.h5", "tokenizer_nn.pickle", "encoder_nn.pickle")
+
 
 
 # Preprocess text function
@@ -73,25 +98,32 @@ def predict_category(title, description):
     text = title + " " + description
     text_processed = process_text(text)
 
+    # Predict the category with the neural network model
+    text_matrix_nn = tokenizer_nn.texts_to_matrix([text_processed])
+    predictions_nn = model_nn.predict(text_matrix_nn)
+
+    # Get the index of the class with the highest probability
+    predicted_class_index = np.argmax(predictions_nn)
+    # Get the corresponding class label from the label encoder
+    predicted_class_label = encoder_nn.classes_[predicted_class_index]
+
+    # Get the predicted class probability
+    predicted_class_prob = predictions_nn[0][predicted_class_index]
+
+
     # Predict the category with both models and store the predictions
     predictions = {
-        'naive_bayes': model_nb.predict([text_processed])[0],
-        'svm': model_svm.predict([text_processed])[0]
+        "naive_bayes": model_nb.predict([text_processed])[0],
+        "svm": model_svm.predict([text_processed])[0],
+        "nn": predicted_class_label,
+        "nn_prob": predicted_class_prob
     }
 
-    # Generate a random confidence value
-    confidence = round(random.random(), 2)
-
-    return predictions, confidence
+    return predictions
 
 
 st.header("Welcome to the fast reporters!")
 st.write("Simply enter a news title and description and we'll classify it for you!")
-# # Create a selectbox widget for choosing a machine learning model
-# model_selectbox = st.selectbox(
-#     "Choose a machine learning model:",
-#     ["Naives Bayes", "Random Forest", "Linear SVM"]
-# )
 
 news_title = st.text_input(label='Newspaper title',
                            placeholder='Enter your article title here')
@@ -100,8 +132,7 @@ news_description = st.text_area(label='Newspaper description',
 
 
 if st.button('Classify'):
-    predictions, confidence = predict_category(news_title, news_description)
-    # st.write("Model: ", model_selectbox)
+    predictions = predict_category(news_title, news_description)
     st.write(f"Category Naives Bayes: {predictions['naive_bayes']}")
     st.write(f"Category SVM: {predictions['svm']}")
-    st.write(f"Confidence: {confidence} (random for now)")
+    st.write(f"Category NN: {predictions['nn']}, with probability: {predictions['nn_prob']:.2f}")
