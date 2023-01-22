@@ -16,9 +16,14 @@ st.set_page_config(
 
 
 # import model for deployment
-model_nb = pickle.load(open("application/naiveBayes.pkl", "rb"))
-model_svm = pickle.load(open("application/linearSVM.pkl", "rb"))
+# load model with cache
+@st.cache(allow_output_mutation=True)
+def load_model():
+    model_nb = pickle.load(open("application/naiveBayes.pkl", "rb"))
+    model_svm = pickle.load(open("application/linearSVM.pkl", "rb"))
+    return model_nb, model_svm
 
+model_nb, model_svm = load_model()
 
 # import model on local machine
 # model_nb = pickle.load(open("naiveBayes.pkl", "rb"))
