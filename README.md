@@ -32,6 +32,9 @@ virtualenv env
 env\Scripts\activate
 ```
 
+## Trouble shooting
+When the streamlit app is not running locally:
+- adjust the path to the model in the streamlit_app.py file
 
 ## data
 dataset: https://www.kaggle.com/datasets/rmisra/news-category-dataset

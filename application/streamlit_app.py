@@ -16,13 +16,16 @@ st.set_page_config(
 
 
 # import model for deployment
-model = pickle.load(open("application/naiveBayes.pkl", "rb"))
+model_nb = pickle.load(open("application/naiveBayes.pkl", "rb"))
+model_svm = pickle.load(open("application/linearSVM.pkl", "rb"))
+
 
 # import model on local machine
-# model = pickle.load(open("naiveBayes.pkl", "rb"))
+# model_nb = pickle.load(open("naiveBayes.pkl", "rb"))
+# model_svm = pickle.load(open("linearSVM.pkl", "rb"))
 
 
-# Preprocess text
+# Preprocess text function
 def process_text(text):
     # convert text to lowercase, remove newlines and carriage returns, and strip leading/trailing whitespace
     text = text.lower().replace('\n', ' ').replace('\r', '').strip()
@@ -55,24 +58,25 @@ def predict_category(title, description):
     text = title + " " + description
     text_processed = process_text(text)
 
-    # Predict the category using the input text
-    predicted_category = model.predict([text_processed])
-    # Convert the predicted category to a string
-    predicted_category = predicted_category[0]
+    # Predict the category with both models and store the predictions
+    predictions = {
+        'naive_bayes': model_nb.predict([text_processed])[0],
+        'svm': model_svm.predict([text_processed])[0]
+    }
 
     # Generate a random confidence value
     confidence = round(random.random(), 2)
 
-    return predicted_category, confidence
+    return predictions, confidence
 
 
 st.header("Welcome to the fast reporters!")
 st.write("Simply enter a news title and description and we'll classify it for you!")
-# Create a selectbox widget for choosing a machine learning model
-model_selectbox = st.selectbox(
-    "Choose a machine learning model:",
-    ["Naives Bayes", "Random Forest", "Linear SVM"]
-)
+# # Create a selectbox widget for choosing a machine learning model
+# model_selectbox = st.selectbox(
+#     "Choose a machine learning model:",
+#     ["Naives Bayes", "Random Forest", "Linear SVM"]
+# )
 
 news_title = st.text_input(label='Newspaper title',
                            placeholder='Enter your article title here')
@@ -81,7 +85,8 @@ news_description = st.text_area(label='Newspaper description',
 
 
 if st.button('Classify'):
-    category, confidence = predict_category(news_title, news_description)
-    st.write("Model: ", model_selectbox)
-    st.write(f"Category: {category}")
+    predictions, confidence = predict_category(news_title, news_description)
+    # st.write("Model: ", model_selectbox)
+    st.write(f"Category Naives Bayes: {predictions['naive_bayes']}")
+    st.write(f"Category SVM: {predictions['svm']}")
     st.write(f"Confidence: {confidence} (random for now)")
