@@ -28,13 +28,13 @@ download_nltk()
 # import model for deployment
 # load model with cache
 @st.cache(allow_output_mutation=True)
-def load_model():
+def load_model_path():
     model_nb = pickle.load(open("application/naiveBayes.pkl", "rb"))
     model_svm = pickle.load(open("application/linearSVM.pkl", "rb"))
     return model_nb, model_svm
 
 
-model_nb, model_svm = load_model()
+model_nb, model_svm = load_model_path()
 
 
 # import model on local machine
