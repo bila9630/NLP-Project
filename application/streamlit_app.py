@@ -41,9 +41,8 @@ model_nb, model_svm = load_model_path()
 # model_nb = pickle.load(open("naiveBayes.pkl", "rb"))
 # model_svm = pickle.load(open("linearSVM.pkl", "rb"))
 
+
 # Load the saved model nn and tokenizer
-
-
 @st.cache(allow_output_mutation=True)
 def load_saved_model(model_path, tokenizer_path, encoder_path):
     # Load the model from the file
@@ -76,17 +75,17 @@ model_cnn, tokenizer_cnn, encoder_cnn = load_saved_model(
 # Preprocess text function
 def process_text(text):
     # convert text to lowercase, remove newlines and carriage returns, and strip leading/trailing whitespace
-    text = text.lower().replace('\n', ' ').replace('\r', '').strip()
+    text = text.lower().replace("\n", " ").replace("\r", "").strip()
 
     # replace multiple spaces with single space
-    text = re.sub(' +', ' ', text)
+    text = re.sub(" +", " ", text)
 
     # remove non-alphanumeric characters and digits
-    text = re.sub(r'[^\w\s]', '', text)
-    text = re.sub(r'[0-9]', '', text)
+    text = re.sub(r"[^\w\s]", "", text)
+    text = re.sub(r"[0-9]", "", text)
 
     # create set of english stopwords
-    stop_words = set(stopwords.words('english'))
+    stop_words = set(stopwords.words("english"))
 
     # tokenize text into words
     word_tokens = word_tokenize(text)
@@ -159,7 +158,7 @@ def predict_category(title, description):
     category_nn, prob_category_nn = predict_nn(text_processed)
     category_cnn, prob_category_cnn = predict_cnn(text_processed)
 
-    # Predict the category with both models and store the predictions
+    # Predict the category with all models and store the predictions
     predictions = {
         "naive_bayes": model_nb.predict([text_processed])[0],
         "svm": model_svm.predict([text_processed])[0],
@@ -175,13 +174,13 @@ def predict_category(title, description):
 st.header("Welcome to the raving reporters!")
 st.write("Simply enter a news title and description and we'll classify it for you!")
 
-news_title = st.text_input(label='Newspaper title',
-                           placeholder='Enter your article title here')
-news_description = st.text_area(label='Newspaper description',
-                                placeholder='Enter a short description of the article here')
+news_title = st.text_input(label="Newspaper title",
+                           placeholder="Enter your article title here")
+news_description = st.text_area(label="Newspaper description",
+                                placeholder="Enter a short description of the article here")
 
 
-if st.button('Classify'):
+if st.button("Classify"):
     predictions = predict_category(news_title, news_description)
     st.write(f"Category Naives Bayes: {predictions['naive_bayes']}")
     st.write(f"Category SVM: {predictions['svm']}")
