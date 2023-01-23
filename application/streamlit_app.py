@@ -10,7 +10,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # set page config (must be called as the first Streamlit command)
 st.set_page_config(
-    page_title="The fast reporters",
+    page_title="The raving reporters",
     page_icon=":newspaper:",
 )
 
@@ -172,7 +172,7 @@ def predict_category(title, description):
     return predictions
 
 
-st.header("Welcome to the fast reporters!")
+st.header("Welcome to the raving reporters!")
 st.write("Simply enter a news title and description and we'll classify it for you!")
 
 news_title = st.text_input(label='Newspaper title',
