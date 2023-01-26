@@ -1,4 +1,6 @@
 # NLP-Project
+<img src="https://img.shields.io/badge/Python-grey?style=flat-square&logo=Python"/>
+
 Check out our application: https://bila9630-nlp-project-applicationstreamlit-app-w1i1j6.streamlit.app/
 
 ## Project description
