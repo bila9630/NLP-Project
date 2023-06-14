@@ -16,7 +16,7 @@ st.set_page_config(
 
 
 # caching nltk data
-@st.cache(allow_output_mutation=True)
+@st.cache_resource
 def download_nltk():
     nltk.download("stopwords")
     nltk.download("punkt")
