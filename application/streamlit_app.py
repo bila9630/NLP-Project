@@ -7,7 +7,6 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-import os
 
 # set page config (must be called as the first Streamlit command)
 st.set_page_config(
@@ -25,16 +24,13 @@ def download_nltk():
 
 download_nltk()
 
-dir = os.getcwd()
-model_nb_dir = dir + "\\naiveBayes.pkl"
-model_svm_dir = dir + "\\linearSVM.pkl"
 
 # import model for deployment
 # load model with cache
 @st.cache(allow_output_mutation=True)
 def load_model_path():
-    model_nb = pickle.load(open(model_nb_dir, "rb"))
-    model_svm = pickle.load(open(model_svm_dir, "rb"))
+    model_nb = pickle.load(open("application/naiveBayes.pkl", "rb"))
+    model_svm = pickle.load(open("application/linearSVM.pkl", "rb"))
     return model_nb, model_svm
 
 
